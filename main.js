@@ -48,24 +48,22 @@ class TicTacToe {
         }).length;
     
     for (let player in this.playerTurns) {
-      for (let i = 0; this.winningCombinations[i]; i++) {
-        for (let j = 0; j < this.winningCombinations[i].length; j++) {
-          if (this.playerTurns[player].includes(this.winningCombinations[i][0]) &&
-              this.playerTurns[player].includes(this.winningCombinations[i][1]) &&
-              this.playerTurns[player].includes(this.winningCombinations[i][2])) {
+      for (let combination in this.winningCombinations) {
+          if (this.playerTurns[player].includes(this.winningCombinations[combination][0]) &&
+              this.playerTurns[player].includes(this.winningCombinations[combination][1]) &&
+              this.playerTurns[player].includes(this.winningCombinations[combination][2])) {
             
             $td.filter(function (index, context) {
               let dataId = $(context).data('id').toString();
-              return dataId === this.winningCombinations[i][0] ||
-                dataId === this.winningCombinations[i][1] ||
-                dataId === this.winningCombinations[i][2];
+              return dataId === this.winningCombinations[combination][0] ||
+                dataId === this.winningCombinations[combination][1] ||
+                dataId === this.winningCombinations[combination][2];
             }.bind(this)).removeClass('inactive').addClass('bg-success winning');
 
             this.announceWinner();
 
             return;
           }
-        }
       }
     }
     if (!emptyCells) {
