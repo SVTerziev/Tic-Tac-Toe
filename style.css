@@ -1,0 +1,48 @@
+body {
+  background-color: #222;
+}
+
+h1 {
+  text-align: center;
+}
+
+table {
+  background-color: tomato;
+  margin-top: 13rem;
+}
+
+td:not(.inactive):not(.gameOver):hover {
+  cursor: pointer;
+  background-color: #ddd;
+  color: tomato;
+}
+
+.table td {
+  font-size: 2rem;
+  color: white;
+  width: 100px;
+  height: 100px;
+  text-align: center;
+  vertical-align: middle;
+  border: 1px solid white;
+  -webkit-transition: all 1s ease;
+  transition: all 1s ease;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+.inactive {
+  background-color: darkorange;
+}
+
+.inactive,
+.gameOver {
+  cursor: not-allowed;
+}
+
+.winning {
+  -webkit-transform: scale(1.1) rotate(180deg);
+  transform: scale(1.1) rotate(180deg);
+}
