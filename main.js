@@ -49,21 +49,21 @@ class TicTacToe {
     
     for (let player in this.playerTurns) {
       for (let combination in this.winningCombinations) {
-          if (this.playerTurns[player].includes(this.winningCombinations[combination][0]) &&
-              this.playerTurns[player].includes(this.winningCombinations[combination][1]) &&
-              this.playerTurns[player].includes(this.winningCombinations[combination][2])) {
-            
-            $td.filter(function (index, context) {
-              let dataId = $(context).data('id').toString();
-              return dataId === this.winningCombinations[combination][0] ||
-                dataId === this.winningCombinations[combination][1] ||
-                dataId === this.winningCombinations[combination][2];
-            }.bind(this)).removeClass('inactive').addClass('bg-success winning');
+        if (this.playerTurns[player].includes(this.winningCombinations[combination][0]) &&
+            this.playerTurns[player].includes(this.winningCombinations[combination][1]) &&
+            this.playerTurns[player].includes(this.winningCombinations[combination][2])) {
 
-            this.announceWinner();
+          $td.filter(function (index, context) {
+            let dataId = $(context).data('id').toString();
+            return dataId === this.winningCombinations[combination][0] ||
+              dataId === this.winningCombinations[combination][1] ||
+              dataId === this.winningCombinations[combination][2];
+          }.bind(this)).removeClass('inactive').addClass('bg-success winning');
 
-            return;
-          }
+          this.announceWinner();
+
+          return;
+        }
       }
     }
     if (!emptyCells) {
