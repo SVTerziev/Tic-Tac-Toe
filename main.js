@@ -42,7 +42,6 @@ class TicTacToe {
     this.events();
   }
   winnerCheck() {
-    console.log(this.emptyCells());
     let $td = $('td');
     
     for (let player in this.playerTurns) {
