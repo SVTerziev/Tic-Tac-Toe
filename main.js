@@ -42,10 +42,8 @@ class TicTacToe {
     this.events();
   }
   winnerCheck() {
-    let $td = $('td'),
-        emptyCells = $td.filter(function () {
-          return !$(this).text();
-        }).length;
+    console.log(this.emptyCells());
+    let $td = $('td');
     
     for (let player in this.playerTurns) {
       for (let combination in this.winningCombinations) {
@@ -66,12 +64,17 @@ class TicTacToe {
         }
       }
     }
-    if (!emptyCells) {
+    if (!this.emptyCells()) {
       this.announceWinner(true);
     }
   }
   currentPlayer() {
     return this.turn ? 'X' : 'O';
+  }
+  emptyCells() {
+    return $('td').filter(function () {
+      return !$(this).text();
+    }).length;
   }
   announceWinner(draw = false) {
     let $winner = $('.winner');
