@@ -1,6 +1,6 @@
 class TicTacToe {
   constructor() {
-    this.winningCombinations = [['00', '01', '02'], ['10', '11', '12'], ['20', '21', '22'], ['00', '10', '20'], ['01', '11', '21'], ['02', '12', '22'], ['00', '11', '22'], ['20', '11', '02']];
+    this.winningCombinations = [[0, 1, 2], [3, 4, 5], [6, 7, 8], [0, 3, 6], [1, 4, 7], [2, 5, 8], [0, 4, 8], [6, 4, 2]];
     this.playerTurns = { X: [], O: [] };
     this.turn = true;
     
@@ -9,21 +9,21 @@ class TicTacToe {
   events() {
     let $td = $('td');
     
-    $td.on('mouseover', (context) => {
+    $td.on('mouseover', context => {
       if (!$(context.target).text()) {
         $(context.target).text(this.currentPlayer()).addClass('hovered');
       }
     });
     
-    $td.on('mouseout', (context) => {
+    $td.on('mouseout', context => {
       if($(context.target).hasClass('hovered')) {
         $(context.target).text('').removeClass('hovered');
       }
     });
     
-    $td.on('click', (context) => {
+    $td.on('click', context => {
       if ($(context.target).hasClass('hovered')) {
-        this.playerTurns[this.currentPlayer()].push($(context.target).data('id').toString());
+        this.playerTurns[this.currentPlayer()].push($(context.target).index('td'));
         
         $(context.target).addClass('inactive').removeClass('hovered').text(this.currentPlayer());
         this.winnerCheck();
@@ -49,7 +49,7 @@ class TicTacToe {
             this.playerTurns[player].includes(combination[2])) {
 
           $td.filter((index, context) => {
-            let dataId = $(context).data('id').toString();
+            let dataId = $(context).index('td');
             return dataId === combination[0] ||
               dataId === combination[1] ||
               dataId === combination[2];
@@ -69,7 +69,7 @@ class TicTacToe {
     return this.turn ? 'X' : 'O';
   }
   emptyCells() {
-    return $('td').filter((index, context) => !$(context).text()).length;
+    return $('td:empty').length;
   }
   announceWinner(draw = false) {
     let $winner = $('.winner');
