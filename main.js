@@ -115,8 +115,4 @@ class TicTacToe {
   }
 }
 
-<<<<<<< HEAD:main.js
 new TicTacToe()
-=======
-new TicTacToe();
->>>>>>> a5d52acdd3032d8a99e134ad43b119cc6862f0a7:main-jquery.js
