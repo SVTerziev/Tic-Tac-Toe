@@ -1,118 +1,86 @@
 class TicTacToe {
-  constructor () {
-    this.players = ['X', 'O']
-    this.playerTurns = { [this.players[0]]: [], [this.players[1]]: [] }
-    this.winningCombinations = [[1, 2, 3], [4, 5, 6], [7, 8, 9], [1, 4, 7], [2, 5, 8], [3, 6, 9], [1, 5, 9], [7, 5, 3]]
-    this.turn = true
-    this.cols = Array.from(document.getElementsByTagName('td'))
-    this.events = {
-      mouseover: element => {
-        if (!element.target.textContent) {
-          element.target.textContent = this.currentPlayer()
-          element.target.classList.add('hovered')
-        }
-      },
-      mouseout: element => {
-        if (element.target.classList.contains('hovered')) {
-          element.target.classList.remove('hovered')
-          element.target.textContent = ''
-        }
-      },
-      click: element => {
-        if (element.target.classList.contains('hovered')) {
-          let index = parseInt(element.target.dataset.index)
-          let classList = element.target.classList
-
-          classList.add('inactive')
-          classList.remove('hovered')
-          element.target.textContent = this.currentPlayer()
-
-          this.playerTurns[this.currentPlayer()].push(index)
-          this.winnerCheck()
-          this.turn = !this.turn
-        }
+  constructor() {
+    this.winningCombinations = [[0, 1, 2], [3, 4, 5], [6, 7, 8], [0, 3, 6], [1, 4, 7], [2, 5, 8], [0, 4, 8], [6, 4, 2]];
+    this.playerTurns = { X: [], O: [] };
+    this.turn = true;
+    
+    this.events();
+  }
+  events() {
+    let $td = $('td');
+    
+    $td.on('mouseover', context => {
+      if (!$(context.target).text()) {
+        $(context.target).text(this.currentPlayer()).addClass('hovered');
       }
-    }
-    this.newGame = this.newGame.bind(this)
-    this.eventHandler()
+    });
+    
+    $td.on('mouseout', context => {
+      if($(context.target).hasClass('hovered')) {
+        $(context.target).text('').removeClass('hovered');
+      }
+    });
+    
+    $td.on('click', context => {
+      if ($(context.target).hasClass('hovered')) {
+        this.playerTurns[this.currentPlayer()].push($(context.target).index('td'));
+        
+        $(context.target).addClass('inactive').removeClass('hovered').text(this.currentPlayer());
+        this.winnerCheck();
+        this.turn = !this.turn;
+      }
+    });
+    
+    $('.newGame').on('click', () => this.newGame());
   }
-  eventHandler () {
-    this.cols.forEach(element => {
-      element.addEventListener('mouseover', this.events.mouseover)
-      element.addEventListener('mouseout', this.events.mouseout)
-      element.addEventListener('click', this.events.click)
-    })
-
-    document.getElementsByClassName('newGame')[0].addEventListener('click', this.newGame)
+  newGame() {
+    $('td, .winner').text('').removeClass('alert bg-success bg-warning winning inactive gameOver');
+    this.playerTurns = { X: [], O: [] };
+    this.turn = true;
+    this.events();
   }
-  newGame () {
-    let winner = document.getElementsByClassName('winner')[0]
-
-    this.cols.forEach(element => {
-      element.textContent = ''
-      element.classList.remove('winning', 'inactive', 'gameOver', 'bg-success')
-    })
-
-    winner.textContent = ''
-    winner.classList.remove('alert', 'bg-success', 'bg-warning')
-
-    this.playerTurns = { [this.players[0]]: [], [this.players[1]]: [] }
-    this.turn = true
-
-    this.eventHandler()
-  }
-  winnerCheck () {
+  winnerCheck() {
+    let $td = $('td');
+    
     for (let player in this.playerTurns) {
       for (let combination of this.winningCombinations) {
         if (this.playerTurns[player].includes(combination[0]) &&
             this.playerTurns[player].includes(combination[1]) &&
             this.playerTurns[player].includes(combination[2])) {
 
-          let filtered = this.cols.filter(context => {
-            let index = parseInt(context.dataset.index)
-            return index === combination[0] ||
-              index === combination[1] ||
-              index === combination[2]
-          })
+          $td.filter((index, context) => {
+            let dataId = $(context).index('td');
+            return dataId === combination[0] ||
+              dataId === combination[1] ||
+              dataId === combination[2];
+          }).removeClass('inactive').addClass('bg-success winning');
 
-          filtered.forEach(winner => {
-            winner.classList.remove('inactive')
-            winner.classList.add('winning', 'bg-success')
-          })
+          this.announceWinner();
 
-          this.announceWinner()
+          return;
         }
       }
     }
     if (!this.emptyCells()) {
-      this.announceWinner(true)
+      this.announceWinner(true);
     }
   }
-  currentPlayer () {
-    return this.turn ? this.players[0] : this.players[1]
+  currentPlayer() {
+    return this.turn ? 'X' : 'O';
   }
-  emptyCells () {
-    return this.cols.filter(element => !element.hasChildNodes()).length
+  emptyCells() {
+    return $('td:empty').length;
   }
-  announceWinner (draw = false) {
-    let winner = document.getElementsByClassName('winner')[0]
-
+  announceWinner(draw = false) {
+    let $winner = $('.winner');
     if (draw) {
-      winner.textContent = 'Draw'
-      winner.classList.add('alert', 'bg-warning')
+      $winner.text('Draw').addClass('alert bg-warning');
     } else {
-      winner.textContent = 'Winner: ' + this.currentPlayer()
-      winner.classList.add('alert', 'bg-success')
+      $winner.text('Winner: ' + this.currentPlayer()).addClass('alert bg-success');
     }
 
-    this.cols.forEach(element => {
-      element.classList.add('gameOver')
-
-      element.removeEventListener('mouseover', this.events.mouseover)
-      element.removeEventListener('mouseout', this.events.mouseout)
-      element.removeEventListener('click', this.events.click)
-    })
+    $('td').off().addClass('gameOver');
   }
 }
 
-new TicTacToe()
+new TicTacToe();
