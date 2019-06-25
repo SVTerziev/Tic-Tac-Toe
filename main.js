@@ -4,7 +4,7 @@ class TicTacToe {
     this.playerTurns = { [this.players[0]]: [], [this.players[1]]: [] }
     this.winningCombinations = [[1, 2, 3], [4, 5, 6], [7, 8, 9], [1, 4, 7], [2, 5, 8], [3, 6, 9], [1, 5, 9], [7, 5, 3]]
     this.turn = true
-    this.cols = [...document.getElementsByTagName('td'))]
+    this.cols = [...document.getElementsByTagName('td')]
     this.events = {
       mouseover: element => {
         if (!element.target.textContent) {
