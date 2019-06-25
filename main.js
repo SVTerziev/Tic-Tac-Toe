@@ -4,7 +4,7 @@ class TicTacToe {
     this.playerTurns = { [this.players[0]]: [], [this.players[1]]: [] }
     this.winningCombinations = [[1, 2, 3], [4, 5, 6], [7, 8, 9], [1, 4, 7], [2, 5, 8], [3, 6, 9], [1, 5, 9], [7, 5, 3]]
     this.turn = true
-    this.cols = Array.from(document.getElementsByTagName('td'))
+    this.cols = [...document.getElementsByTagName('td'))]
     this.events = {
       mouseover: element => {
         if (!element.target.textContent) {
@@ -20,8 +20,8 @@ class TicTacToe {
       },
       click: element => {
         if (element.target.classList.contains('hovered')) {
-          let index = parseInt(element.target.dataset.index)
-          let classList = element.target.classList
+          const index = parseInt(element.target.dataset.index)
+          const classList = element.target.classList
 
           classList.add('inactive')
           classList.remove('hovered')
@@ -46,7 +46,7 @@ class TicTacToe {
     document.getElementsByClassName('newGame')[0].addEventListener('click', this.newGame)
   }
   newGame () {
-    let winner = document.getElementsByClassName('winner')[0]
+    const winner = document.getElementsByClassName('winner')[0]
 
     this.cols.forEach(element => {
       element.textContent = ''
@@ -68,8 +68,8 @@ class TicTacToe {
             this.playerTurns[player].includes(combination[1]) &&
             this.playerTurns[player].includes(combination[2])) {
 
-          let filtered = this.cols.filter(context => {
-            let index = parseInt(context.dataset.index)
+          const filtered = this.cols.filter(context => {
+            const index = parseInt(context.dataset.index)
             return index === combination[0] ||
               index === combination[1] ||
               index === combination[2]
@@ -83,8 +83,7 @@ class TicTacToe {
           this.announceWinner()
         }
       }
-    }
-    if (!this.emptyCells()) {
+    } else if (!this.emptyCells()) {
       this.announceWinner(true)
     }
   }
@@ -95,7 +94,7 @@ class TicTacToe {
     return this.cols.filter(element => !element.hasChildNodes()).length
   }
   announceWinner (draw = false) {
-    let winner = document.getElementsByClassName('winner')[0]
+    const winner = document.getElementsByClassName('winner')[0]
 
     if (draw) {
       winner.textContent = 'Draw'
