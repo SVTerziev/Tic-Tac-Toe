@@ -2,8 +2,18 @@ class TicTacToe {
   constructor () {
     this.players = ['X', 'O']
     this.playerTurns = { [this.players[0]]: [], [this.players[1]]: [] }
-    this.winningCombinations = [[1, 2, 3], [4, 5, 6], [7, 8, 9], [1, 4, 7], [2, 5, 8], [3, 6, 9], [1, 5, 9], [7, 5, 3]]
+    this.winningCombinations = [
+      [1, 2, 3],
+      [4, 5, 6],
+      [7, 8, 9],
+      [1, 4, 7],
+      [2, 5, 8],
+      [3, 6, 9],
+      [1, 5, 9],
+      [7, 5, 3]
+    ]
     this.turn = true
+    this.hasWinner = false
     this.cols = [...document.getElementsByTagName('td')]
     this.events = {
       mouseover: element => {
@@ -58,21 +68,21 @@ class TicTacToe {
 
     this.playerTurns = { [this.players[0]]: [], [this.players[1]]: [] }
     this.turn = true
+    this.hasWinner = false
 
     this.eventHandler()
   }
   winnerCheck () {
     for (let player in this.playerTurns) {
       for (let combination of this.winningCombinations) {
-        if (this.playerTurns[player].includes(combination[0]) &&
-            this.playerTurns[player].includes(combination[1]) &&
-            this.playerTurns[player].includes(combination[2])) {
-
+        if (
+          this.playerTurns[player].includes(combination[0]) &&
+          this.playerTurns[player].includes(combination[1]) &&
+          this.playerTurns[player].includes(combination[2])
+        ) {
           const filtered = this.cols.filter(context => {
             const index = parseInt(context.dataset.index)
-            return index === combination[0] ||
-              index === combination[1] ||
-              index === combination[2]
+            return index === combination[0] || index === combination[1] || index === combination[2]
           })
 
           filtered.forEach(winner => {
@@ -81,11 +91,12 @@ class TicTacToe {
           })
 
           this.announceWinner()
+          break
         }
       }
-    } else if (!this.emptyCells()) {
-      this.announceWinner(true)
     }
+
+    !this.emptyCells() && !this.hasWinner && this.announceWinner(true)
   }
   currentPlayer () {
     return this.turn ? this.players[0] : this.players[1]
@@ -96,13 +107,10 @@ class TicTacToe {
   announceWinner (draw = false) {
     const winner = document.getElementsByClassName('winner')[0]
 
-    if (draw) {
-      winner.textContent = 'Draw'
-      winner.classList.add('alert', 'bg-warning')
-    } else {
-      winner.textContent = 'Winner: ' + this.currentPlayer()
-      winner.classList.add('alert', 'bg-success')
-    }
+    this.hasWinner = true
+
+    winner.textContent = draw ? 'Draw' : `Winner ${this.currentPlayer()}`
+    winner.classList.add('alert', draw ? 'bg-warning' : 'bg-success')
 
     this.cols.forEach(element => {
       element.classList.add('gameOver')
