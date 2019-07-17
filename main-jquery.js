@@ -3,7 +3,8 @@ class TicTacToe {
     this.winningCombinations = [[0, 1, 2], [3, 4, 5], [6, 7, 8], [0, 3, 6], [1, 4, 7], [2, 5, 8], [0, 4, 8], [6, 4, 2]]
     this.playerTurns = { X: [], O: [] }
     this.turn = true
-
+    this.hasWinner = false
+    
     this.events()
   }
   events () {
@@ -37,6 +38,7 @@ class TicTacToe {
     $('td, .winner').text('').removeClass('alert bg-success bg-warning winning inactive gameOver')
     this.playerTurns = { X: [], O: [] }
     this.turn = true
+    this.hasWinner = false
     this.events()
   }
   winnerCheck () {
@@ -56,10 +58,11 @@ class TicTacToe {
           }).removeClass('inactive').addClass('bg-success winning')
 
           this.announceWinner()
+          break
         }
       }
     }
-    if (!this.emptyCells()) {
+    if (!this.emptyCells() && !this.hasWinner) {
       this.announceWinner(true)
     }
   }
@@ -70,6 +73,7 @@ class TicTacToe {
     return $('td:empty').length
   }
   announceWinner (draw = false) {
+    this.hasWinner = true
     let $winner = $('.winner')
     if (draw) {
       $winner.text('Draw').addClass('alert bg-warning')
